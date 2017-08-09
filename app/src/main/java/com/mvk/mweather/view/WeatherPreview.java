@@ -14,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.mvk.mweather.R;
@@ -64,7 +65,7 @@ public class WeatherPreview extends AppCompatActivity {
         else{
             Log.d(TAG, "lets set Everything up");
             getForecast(latitude, longitude);
-            parseAddress();
+            getAddress();
         }
     }
 
@@ -111,7 +112,7 @@ public class WeatherPreview extends AppCompatActivity {
 
     //******************** Requests a address details from Google API ******************************
     //gets city name based on your location from google api
-    private void parseAddress(){
+    private void getAddress(){
         if(networkAvailability()) {
             String googleApi = "http://maps.googleapis.com/maps/api/geocode/json?latlng="+latitude+","+longitude;
 
@@ -249,19 +250,23 @@ public class WeatherPreview extends AppCompatActivity {
         tv1.setText(weather.getSummary());
         timeTV.setText(weather.getFormattedTime()+"");
         rainTV.setText("Chance of Rain: "+ weather.getPrecipChance()+"%");
+//
+//        RelativeLayout relativeLayout = (RelativeLayout) findViewById(R.id.activity_weather_preview);
+//        relativeLayout.setBackgroundResource(0);
 //        //gets the id of a resource in a drawable dir
-//        Drawable drawable = ResourcesCompat.getDrawable(getResources(), mForecast.getCurrent().getIconId(), null);
+//        Drawable drawable = ResourcesCompat.getDrawable(getResources(), mForecast.getCurrent().getIconResource(), null);
 //        mIconImageView.setImageDrawable(drawable);
     }
 
     //**************************** Create Weather Object from JSON  ********************************
     private Weather getWeather(String jsonData) throws JSONException {
         JSONObject forecast = new JSONObject(jsonData);
+        Log.d(TAG, forecast.toString());
         String timeZone = forecast.getString("timezone");
         JSONObject currently = forecast.getJSONObject("currently");
         Weather weather = new Weather();
         weather.setTime(currently.getLong("time"));
-        //weather.setIcon(currently.getString("icon"));
+        weather.setIcon(currently.getString("icon"));
         weather.setPrecipChance(currently.getDouble("precipProbability"));
         weather.setSummary(currently.getString("summary"));
         weather.setTemperature(currently.getDouble("temperature"));

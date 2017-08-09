@@ -73,4 +73,19 @@ public class Weather {
         mTime = time;
     }
 
+    //---------------------------------
+    public String getIcon() {
+        return mIcon;
+    }
+
+    public void setIcon(String icon) {
+        mIcon = icon;
+    }
+
+    //will return the resource id to set the background according to current weather
+    public static int getIconResource(String iconString){
+
+
+        return 0;
+    }
 }
